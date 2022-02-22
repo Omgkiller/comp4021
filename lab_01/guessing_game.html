@@ -4,22 +4,28 @@
 <head>
     <title>Guessing Game!</title>
     <script>
-    let answer;
-
     function load() {
         // Prepare the random number
+        return parseInt(Math.random() * 100) + 1;
     }
 
     function start() {
         // Switch the display from the 'title screen' to the 'main screen'
+        document.getElementById("title").style.display = "none";
+        document.getElementById("main").style.display = "block";
     }
-
+    let random = load();
+    //document.getElementById("button").addEventListener("click", guess);
     function guess() {
         // Find the previous guess and return if
         // the previous guess is already correct
-
+        let guessOld = document.getElementById("guess").innerHTML;
+        if (parseInt(guessOld)==random){
+            return false;
+        }
         // Ask for the guess from the user
-
+        guessNew = prompt("Please enter your guess:");
+        document.getElementById("guess").innerHTML = guessNew;
         // Check the guess with the lab logic
         //   Case 1: not a number
         //   Case 2: not an integer
@@ -27,7 +33,23 @@
         //   Case 4: the guess is too small
         //   Case 5: the guess is too big
         //   Case 6: the guess is correct
-
+        if (isNaN(parseInt(guessNew))){
+            document.getElementById("hint").innerHTML = "Please enter a number!";
+        }else if (parseFloat(guessNew)%1!=0){
+            document.getElementById("hint").innerHTML = "Please enter an integer!";
+        }
+        else if (parseInt(guessNew)>100 || parseInt(guessNew)<0){
+            document.getElementById("hint").innerHTML = "Please enter an integer between 1 and 100!"; 
+        }
+        else if (parseInt(guessNew)<random){
+            document.getElementById("hint").innerHTML = "Your number is too small!";  
+        }
+        else if (parseInt(guessNew)>random){
+            document.getElementById("hint").innerHTML = "Your number is too big!";  
+        }else {
+            document.getElementById("hint").innerHTML = "Your are right!";  
+            return true;
+        }
         return false;
     }
     </script>
@@ -37,7 +59,8 @@
         font-family: Georgia, serif;
         background: black url(smoke.png);
         background-size: 100% 100%;
-        height: 32.5vh;
+        background-repeat: no-repeat;
+        height: 50vh;
         margin: 0;
         padding: 0;
     }
@@ -45,10 +68,10 @@
     /* Set up the style of the boxes of the two screens */
     .box{
        width: 90vw;
-       height: 30vh;      
+       height: 50vh;      
        box-sizing: border-box;
        border: 5px solid black;
-        margin: 2.5vh 5vw 5vh;
+       margin: 2.5vh 5vw 5vh;
     }
     /* Set up the style for the title screen */
     #title{
@@ -57,6 +80,7 @@
         text-align: center;
         text-transform: uppercase;
         color: white;
+        vertical-align: middle;
     }
     /* Set up the style for the p and big */
     p{
@@ -69,6 +93,7 @@
         box-sizing: border-box;
         font-size: 5vh;
         margin: 2vh;
+        margin-top: 15vh;
     }
     #title2{
         box-sizing: border-box;
@@ -85,6 +110,7 @@
     #main{
         text-align: center;
         display: none;
+        vertical-align: middle;
     }
     /* Set up the style for 'button' */
     #button{
@@ -105,7 +131,7 @@
 </head>
 <body>
     <!-- the title screen -->
-    <div class="box" id="title">
+    <div class="box" id="title" onclick="start()">
         <p id="title1">Fantastic</p>
         <p id="title2">Number</p>
         <p id="subtitle">that <big>You Need</big><br>
@@ -114,8 +140,8 @@
 
     <!-- the game screen -->
     <div class="box" id="main">
-        <p>Your Guess: <span id="guess">-</span></p>
-        <a id="button" href="#">Enter Your Guess</a>
+        <p style="margin-top: 15vh;">Your Guess: <span id="guess">-</span></p>
+        <a id="button" href="#" onclick="return guess()">Enter Your Guess</a>
         <p id="hint">Press the button to start the guess!</p>
     </div>
 </body>
